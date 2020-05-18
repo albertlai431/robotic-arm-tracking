@@ -2,15 +2,15 @@
 
 ### DDPG Algorithm
 
-The **DDPG (Deep Deterministic Policy Gradient)** algorithm is based on **Deep Q Learning**. Similarly to DQNs, it uses a replay buffer as well as fixed-Q targets for its networks to help the model converge. 
+The **DDPG (Deep Deterministic Policy Gradient)** algorithm is based on **Deep Q Learning**. Similarly to DQNs, it uses a replay buffer as well as fixed-Q targets for its networks to help the model converge. Its actor also picks the best action deterministically, rather than stocastically like traditional policy methods. Where DDPG differs from Deep Q Learning is that it is able to generalize to continuous action spaces, something that Deep Q Learning is unable to do.
 
-However, unlike Deep Q Learning, the DDPG algorithm is an actor-critic method. 
+DDPG algorithm is a (self-proclaimed) actor-critic method. It has 4 networks; an actor network, a critic network, and fixed target networks for both of them. The actor network takes a state as input and outputs the believed best action deterministaically. The critic takes both the state and action as input and outputs the Q-value for that state-action pair. Similarly to DQNs, the loss is calculated between the predicted reward at the current state and of the next state, which is then used to backpropogate through both networks to allow them to learn. The soft update used to update the fixed networks is slightly different than that of Deep Q-learning, it updates only a small percentage of the fixed network at a time (0.1%) to allow the learning to be more stable. 
 
 ### Implementation
 
 **Agent**
 - Actor (policy) method and its fixed target
-- Critic (baseilne) method and its fixed target
+- Critic (baseline) method and its fixed target
 - One replay buffer 
 - Act method: uses the local actor network along with the noise function to output the next action
 - Step method: store experience tuple in replay buffer, and learns UPDATE_EVERY
@@ -25,30 +25,34 @@ However, unlike Deep Q Learning, the DDPG algorithm is an actor-critic method.
     - Observe reward, next state, and done
     - Pass (state,action,reward,next_state, done) tuple to Agent (Agent step method)
       - Agent stores tuple in replay buffer
-    - After UPDATE_EVERY iterations, sample batch of experiences from replay buffer and update both network (Agent learn method)
+    - After UPDATE_EVERY iterations, sample batch of experiences from replay buffer and update both networks (Agent learn method)
       - Update target network after a certain number of updates
 
 ### Hyperparameters
-<!---
 ```python
-
-```
---->      
+BUFFER_SIZE = int(1e6)  # replay buffer size
+BATCH_SIZE = 128        # minibatch size
+GAMMA = 0.99            # discount factor
+TAU = 1e-3              # for soft update of target parameters
+LR_ACTOR = 2e-4         # learning rate of the actor 
+LR_CRITIC = 2e-3        # learning rate of the critic
+WEIGHT_DECAY = 0        # L2 weight decay
+``` 
 
 ### Deep Q-Network Architecture
 #### Actor
 1. **Fully Connected**: 33 → 128 (Input layer)
-2. **Batchnorm** (Normalization)
-3. **RELU** (Activation)
+2. **RELU** (Activation)
+3. **Batchnorm** (Normalization)
 4. **Fully Connected**: 128 → 128 (Hidden layer)
 5. **RELU** (Activation)
 6. **Fully Connected**: 128 → 4 (Output layer)
-7. **TanH** (Activation)
+7. **Tanh** (Activation)
 
 ## Critic
 1. **Fully Connected**: 33 → 128 (Input layer)
-2. **Batchnorm** (Normalization)
-3. **RELU** (Activation)
+2. **RELU** (Activation)
+3. **Batchnorm** (Normalization)
 4. **Concatenation** 128 → 132 (Concatenating actions and state)
 5. **Fully Connected**: 132 → 128 (Hidden layer)
 6. **RELU** (Activation)
@@ -64,6 +68,4 @@ _Environment solved in 391 episodes!	Average Score: 13.02_
 
 
 ## Ideas for Future Work
-<!---
-To improve performance, multiple future steps could be taken. For one, further improvements like Double DQN, Prioritized Experience Replay and Duelling networks could be implemented. In addition, different architectures of the Deep-Q network would be explored to better model the environment. Finally, more experimentation could be done with the hyperparameters! 
---->
+To improve performance, other algorithms like PPO, D4PG, GAE and A3C could be implemented. As well, more experimentation could be done with hyperparameters, network layer sizes, and training epochs. 
