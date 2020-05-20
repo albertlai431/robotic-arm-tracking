@@ -25,8 +25,8 @@ DDPG algorithm is a (self-proclaimed) actor-critic method. It has 4 networks; an
     - Observe reward, next state, and done
     - Pass (state,action,reward,next_state, done) tuple to Agent (Agent step method)
       - Agent stores tuple in replay buffer
-    - After UPDATE_EVERY iterations, sample batch of experiences from replay buffer and update both networks (Agent learn method)
-      - Update target network after a certain number of updates
+    - After UPDATE_EVERY iterations, sample batch of experiences from replay buffer and update both networks (Agent learn method) UPDATE_TIMES times
+      - Update target networks after a certain number of updates
 
 ### Hyperparameters
 ```python
@@ -34,9 +34,11 @@ BUFFER_SIZE = int(1e6)  # replay buffer size
 BATCH_SIZE = 128        # minibatch size
 GAMMA = 0.99            # discount factor
 TAU = 1e-3              # for soft update of target parameters
-LR_ACTOR = 2e-4         # learning rate of the actor 
-LR_CRITIC = 2e-3        # learning rate of the critic
+LR_ACTOR = 1e-4         # learning rate of the actor 
+LR_CRITIC = 1e-3        # learning rate of the critic
 WEIGHT_DECAY = 0        # L2 weight decay
+UPDATE_EVERY = 20       # how often to update the network
+UPDATE_TIMES = 20       # how many times to update the network
 ``` 
 
 ### Deep Q-Network Architecture
@@ -60,12 +62,10 @@ WEIGHT_DECAY = 0        # L2 weight decay
 
 
 ## Plot of Rewards
-<!---
-![Plot of Rewards](/assets/training.png "Plot of Rewards")
+![Plot of Rewards](/assets/plot.png "Plot of Rewards")
 
-_Environment solved in 391 episodes!	Average Score: 13.02_
---->
+Environment solved in 653 episodes!	Average Score: 30.05_
 
 
 ## Ideas for Future Work
-To improve performance, other algorithms like PPO, D4PG, GAE and A3C could be implemented. As well, more experimentation could be done with hyperparameters, network layer sizes, and training epochs. 
+To improve performance, other algorithms like PPO, D4PG, GAE and A3C could be implemented. As well, more experimentation could be done with hyperparameters, network layer sizes, and training epochs. Finally, the second environment with 20 agents could be experimented with to improved performance.  
