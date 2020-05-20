@@ -64,7 +64,7 @@ UPDATE_TIMES = 20       # how many times to update the network
 ## Plot of Rewards
 ![Plot of Rewards](/assets/plot.png "Plot of Rewards")
 
-Environment solved in 653 episodes!	Average Score: 30.05_
+_Environment solved in 653 episodes!	Average Score: 30.05_
 
 
 ## Ideas for Future Work
